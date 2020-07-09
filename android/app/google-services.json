@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "743242190710",
+    "firebase_url": "https://connectec-push.firebaseio.com",
+    "project_id": "connectec-push",
+    "storage_bucket": "connectec-push.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:743242190710:android:2945d6be9ad052966c3457",
+        "android_client_info": {
+          "package_name": "com.jcsc.connectec"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "743242190710-ap5plfjb70mh8hr6oippcaqco7p54ias.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jcsc.connectec",
+            "certificate_hash": "b6042d3fa9a859f1925fe10a0d7f1b94b8ff3a88"
+          }
+        },
+        {
+          "client_id": "743242190710-0b2dp3phci5hjngsqf7tiit4boknctm1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTquCxCj8Mzj7L9eoj6G4QYC9GyHFR2vk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "743242190710-0b2dp3phci5hjngsqf7tiit4boknctm1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
