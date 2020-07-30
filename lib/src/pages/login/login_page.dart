@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:preferencia_usuario_app/src/blocs/login_bloc.dart';
 import 'package:preferencia_usuario_app/src/blocs/provider.dart';
 import 'package:preferencia_usuario_app/src/providers/login_provider.dart';
 import 'package:preferencia_usuario_app/src/shared_prefs/preferencias_usuario.dart';
+import 'package:preferencia_usuario_app/src/providers/connection_provider.dart';
 
 class LoginPage extends StatefulWidget {
   static final String routeName = 'login-page';
@@ -14,6 +16,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   LoginProvider loginProvider = LoginProvider();
+  ConnectionProvider connectionProvider = ConnectionProvider();
   final prefs = new PreferenciasUsuario();
   bool _showPassword = false;
   int _state = 0;
@@ -23,13 +26,18 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   double _width = double.maxFinite;
   Color _colorButton;
   String _msg = '';
+  bool _progressActive;
 
   @override
   Widget build(BuildContext context) {
     _colorButton = Theme.of(context).primaryColor;
     return Scaffold(
       body: Stack(
-        children: <Widget>[_crearFondo(context), _loginForm(context)],
+        children: <Widget>[
+          _crearFondo(context),
+          _loginForm(context),
+          _progress()
+        ],
       ),
     );
   }
@@ -146,7 +154,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
           builder: (context, snapshot) {
             return PhysicalModel(
               elevation: 8,
-              shadowColor: Colors.lightGreenAccent,
+              shadowColor: Colors.yellow[200],
               color: _colorButton,
               borderRadius: BorderRadius.circular(25),
               child: Container(
@@ -177,6 +185,14 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
             );
           }),
     );
+  }
+
+  Widget _progress() {
+    return _progressActive == true
+        ? Container(
+            color: Colors.black.withOpacity(0.7),
+          )
+        : Container();
   }
 
   setUpButtonChild() {
@@ -213,33 +229,41 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     _controller =
         AnimationController(duration: Duration(milliseconds: 300), vsync: this);
 
-    _animation = Tween(begin: 0.0, end: 1).animate(_controller)
-      ..addListener(() {
-        setState(() {
-          _width = initialWidth - ((initialWidth - 48) * _animation.value);
+    var connection = await connectionProvider.checkConnection();
+    var resp;
+    if (connection) {
+      _animation = Tween(begin: 0.0, end: 1).animate(_controller)
+        ..addListener(() {
+          setState(() {
+            _width = initialWidth - ((initialWidth - 48) * _animation.value);
+          });
         });
+      _controller.forward();
+
+      setState(() {
+        _state = 1;
+        _progressActive = true;
       });
-    _controller.forward();
-
+      resp = await _login(context);
+    } else {
+      _msg = 'Revisa tu conexión a internet';
+      resp = 3;
+    }
     setState(() {
-      _state = 1;
-    });
-
-    var resp = await _login(context);
-    setState(() {
+      _progressActive = false;
       _state = resp;
       if (resp == 3) {
         _showToast(context);
         Timer(Duration(milliseconds: 4200), () {
-          if(_state != 0){
-          setState(() {
-            _state = 0;
-            // _width = double.infinity;
-            animateResetButton();
-          });
+          if (_state != 0) {
+            setState(() {
+              _state = 0;
+              // _width = double.infinity;
+              animateResetButton();
+            });
           }
         });
-      } else {
+      } else if (resp == 2) {
         Timer(Duration(milliseconds: 1000), () {
           Navigator.pushReplacementNamed(context, 'news');
         });
@@ -250,24 +274,26 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   void animateResetButton() {
     final sizeScreen = MediaQuery.of(context).size;
     _controller =
-        AnimationController(duration: Duration(milliseconds:300), vsync: this);
-    
+        AnimationController(duration: Duration(milliseconds: 300), vsync: this);
+
     _animation = Tween(begin: 0.0, end: 1.0).animate(_controller)
       ..addListener(() {
         setState(() {
           // _width = double.infinity;
-          _width = (sizeScreen.width*0.8) * _animation.value;
+          _width = (sizeScreen.width * 0.8) * _animation.value;
         });
       });
     _controller.forward();
   }
 
   Future<int> _login(BuildContext context) async {
-    print('=============== LOGIN');
     var resp = 3;
     final bloc = Provider.of(context);
     final usuario = await loginProvider.getLogin(bloc.user, bloc.password);
-    if (usuario.ok == true) {
+    if (usuario == null) {
+      _msg = 'Revisa tu conexión a internet';
+      resp = 3;
+    } else if (usuario.ok == true) {
       if (usuario.active == false) {
         _msg = 'El usuario no se encuentra activo';
       } else {
@@ -277,11 +303,12 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         prefs.tokenLogin = usuario.token;
         prefs.userRol = usuario.role;
         prefs.nombreUsuario = usuario.name;
+        prefs.nick = usuario.nickname;
+        prefs.phrase = bloc.password;
       }
     } else {
       _msg = usuario.message;
     }
-    print('======================LOGIN RESp'+resp.toString());
     return resp;
   }
 
@@ -297,12 +324,12 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
             // textColor: Colors.blue,
             label: 'OK',
             onPressed: () {
-              if(_state != 0){
-              setState(() {
-                scaffold.hideCurrentSnackBar();
-                _state = 0;
-                animateResetButton();
-              });
+              if (_state != 0) {
+                setState(() {
+                  scaffold.hideCurrentSnackBar();
+                  _state = 0;
+                  animateResetButton();
+                });
               }
             }),
       ),

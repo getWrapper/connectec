@@ -15,6 +15,7 @@ class PushNotificationsProvder {
 
   initNotifications() {
     _firebaseMessaging.requestNotificationPermissions();
+    _chekTokenFCM();
       if(prefs.tokenFCMSaved == 0){
         _obtenerTokenFCM();
       }else{
@@ -23,7 +24,7 @@ class PushNotificationsProvder {
        final diff = now.difference(timeSaved);
        final diasDif = diff.inDays;
        if(diasDif > 30){
-         _actualizarTimeTokenFCM();
+         _actualizarTimeTokenFCM(prefs.tokenFCM);
        }
       }
     _firebaseMessaging.configure(
@@ -93,25 +94,59 @@ class PushNotificationsProvder {
   }
 
   _obtenerTokenFCM(){
-  _firebaseMessaging.getToken().then((token) async{
+  _firebaseMessaging.getToken().then((token){
+    _guardarTokenId(token);
+    });
+  }
+  _actualizarTimeTokenFCM(String newToken)async{
+    var tokenAct;
+    if(prefs.tokenFCM == null){
+      tokenAct = newToken;
+    }else{
+      tokenAct = prefs.tokenFCM;
+    }
+ final resp = await tokenPushProvider.actTokenId(tokenAct, newToken);
+    if(resp == 'true'){
+      prefs.tokenFCMSaved = 1;
+      prefs.tokenFCMSavedTime = new DateTime.now().toString();
+      prefs.tokenFCM = newToken;
+      prefs.notAvisos = true;
+    }else{
+      prefs.tokenFCMSaved = 0;
+      prefs.notAvisos = false;
+    }
+  }
+
+  _subscribeToTopic(){
+    _firebaseMessaging.subscribeToTopic('avisos-gral');
+  }
+  _unsubscribeFromTopic(){
+    _firebaseMessaging.unsubscribeFromTopic('avisos-gral');
+  }
+  _chekTokenFCM(){
+        _firebaseMessaging.onTokenRefresh.listen((newToken) {
+        _actualizarTimeTokenFCM(newToken);
+      });
+  }
+   _guardarTokenId(token) async{
     final resp = await tokenPushProvider.setTokenId(token);
     if(resp == 'true'){
       prefs.tokenFCMSaved = 1;
       prefs.tokenFCM = token;
       prefs.tokenFCMSavedTime = new DateTime.now().toString();
+      prefs.notAvisos = true;
     }else{
       prefs.tokenFCMSaved = 0;
     }
-    });
-  }
-  _actualizarTimeTokenFCM()async{
- final resp = await tokenPushProvider.actTokenId(prefs.tokenFCM);
-    if(resp == 'true'){
-      prefs.tokenFCMSaved = 1;
-      prefs.tokenFCMSavedTime = new DateTime.now().toString();
-    }else{
-      prefs.tokenFCMSaved = 0;
-    }
-  }
+    _subscribeToTopic();
+   }
+
+   confNotAvisos(bool notifica){
+     if(notifica){
+       _subscribeToTopic();
+     }else{
+       _unsubscribeFromTopic();
+     }
+   }
   
 }

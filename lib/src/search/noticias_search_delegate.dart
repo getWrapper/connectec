@@ -1,22 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:preferencia_usuario_app/src/models/noticias_model.dart';
-import 'package:preferencia_usuario_app/src/pages/noticias_detalle_page.dart';
+import 'package:preferencia_usuario_app/src/pages/avisos/avisos_detalle_page.dart';
 import 'package:preferencia_usuario_app/src/providers/noticias_provider.dart';
 
 class NoticiasSearch extends SearchDelegate{
 String seleccion ='';
 final noticiasProvider = new NoticiasProvider();
-
-final peliculas = [
-  'Parasitos',
-  'Parasitos2',
-  'Hola',
-  'Otra Peli',
-  'Capitan',
-  'SpiderMan'
-  'Holas',
-];
-final peliculasRecientes = ['Spiderman', 'Capitan America'];
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -74,13 +63,21 @@ final peliculasRecientes = ['Spiderman', 'Capitan America'];
            children: peliculas.map((noticia){
              return ListTile(
                leading: FadeInImage( 
-                 image: NetworkImage(noticia.getNoticiaImg()),
+                 image: NetworkImage(noticia.getNoticiaImg()[0]),
                  placeholder: AssetImage('assets/img/no-image.jpg'),
                  width: 50.0,
                  fit: BoxFit.contain,
                ),
-               title: Text(noticia.titulo),
-               subtitle: Text(noticia.descripcion),
+               title: Text(noticia.titulo,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.justify,
+                    style: Theme.of(context).textTheme.headline1),
+               subtitle: Text(noticia.descripcion,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.justify,
+                      style: Theme.of(context).textTheme.bodyText1),
                onTap: (){
                  close(context, null);
                  Navigator.pushNamed(context, NoticiasDetallePage.routeName, arguments: noticia);

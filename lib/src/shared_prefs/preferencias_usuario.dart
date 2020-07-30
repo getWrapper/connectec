@@ -18,12 +18,12 @@ class PreferenciasUsuario {
 
 
   // GET y SET del _colorSecundario
-  get colorSecundario {
-    return _prefs.getBool("colorSecundario") ?? false;
+  get darkMode {
+    return _prefs.getBool("darkMode") ?? false;
   }
 
-  set colorSecundario( bool value ) {
-    _prefs.setBool("colorSecundario", value);
+  set darkMode( bool value ) {
+    _prefs.setBool("darkMode", value);
   }
 
 
@@ -36,6 +36,22 @@ class PreferenciasUsuario {
     _prefs.setString("nombreUsuario", value);
   }
 
+// GET y SET del nick
+  get nick {
+    return _prefs.getString("nick") ?? '';
+  }
+
+  set nick( String nick ) {
+    _prefs.setString("nick", nick);
+  }
+  // GET y SET del nick
+  get phrase {
+    return _prefs.getString("phrase") ?? '';
+  }
+
+  set phrase( String phrase ) {
+    _prefs.setString("phrase", phrase);
+  }
 
   ////////////////// FCM 
   // GET y SET del TokenFCM
@@ -85,6 +101,13 @@ class PreferenciasUsuario {
 
   set userRol(String role){
     _prefs.setString("userRol", role);
+  }
+  get notAvisos{
+    return _prefs.getBool("notAvisos") ?? false;
+  }
+
+  set notAvisos(bool notAvisos){
+    _prefs.setBool("notAvisos", notAvisos);
   }
 
 }

@@ -20,7 +20,7 @@ class Noticia {
   int v;
   String descripcion;
   Area area;
-  String img;
+  Images img;
 
   Noticia({
     this.time,
@@ -39,20 +39,29 @@ Noticia.fromJsonMap(Map<String, dynamic> json) {
     titulo      = json['titulo'];
     descripcion = json['descripcion'];
     area         = new Area.fromJsonMap(json['area']);
-    img      = json['img'];   
+    img      = new Images.fromJsonList(json['img']);   
   }
 
    getNoticiaImg  (){
+     List<String> imgUrls = new List();
          String _url = 'connectec-alpha.herokuapp.com';
-      if(img == null){
-        return 'https://www.pequenomundo.cl/wp-content/themes/childcare/images/default.png';
-      }else{
-        // Local
-      // return 'http://10.0.2.2:3000/imagen/noticia/$img';
-      // Prod
-      return 'https://'+_url+'/imagen/noticia/$img';
+         if(img.images.isEmpty){
+           imgUrls.add('https://www.pequenomundo.cl/wp-content/themes/childcare/images/default.png');
+         }
+         img.images.forEach((urlImg) {
+           imgUrls.add('https://'+_url+'/imagen/noticia/$urlImg');
+         });
+    
+      return imgUrls;
 
-      }
+  }
+
+  Noticia.nuevoAviso(Map<String, dynamic> json) {
+    time = json['time'];
+    id  = json['_id'];
+    titulo      = json['titulo'];
+    descripcion = json['descripcion'];
+    img      = new Images.fromJsonList(json['img']);  
   }
 }
 class Area {
@@ -74,6 +83,22 @@ class Area {
 class AvisoDelete{
   bool ok;
   String message;
+}
+
+class Images {
+  List<String> images = new List();
+
+  Images({
+    this.images
+  });
+ Images.fromJsonList( List<dynamic> jsonList ){
+    if(jsonList == null) return;
+
+    for (var item in jsonList) {
+      images.add(item);
+    }
+  }
+
 }
 
 

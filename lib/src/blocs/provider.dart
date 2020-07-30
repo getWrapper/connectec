@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:preferencia_usuario_app/src/blocs/aviso_bloc.dart';
 import 'package:preferencia_usuario_app/src/blocs/login_bloc.dart';
-export 'package:preferencia_usuario_app/src/blocs/login_bloc.dart';
 
 class Provider extends InheritedWidget{
 
@@ -16,6 +16,7 @@ class Provider extends InheritedWidget{
   Provider._internal({Key key, Widget child}) : super(key:key, child: child);
 
   final loginBloc = LoginBloc();
+  final avisoBloc = AvisoBloc();
 
 
   @override
@@ -24,4 +25,8 @@ class Provider extends InheritedWidget{
   static LoginBloc of (BuildContext context){
         return context.dependOnInheritedWidgetOfExactType<Provider>().loginBloc;
   }
+  static AvisoBloc ofAviso (BuildContext context){
+        return context.dependOnInheritedWidgetOfExactType<Provider>().avisoBloc;
+  }
+  
 }

@@ -6,7 +6,9 @@ class ModalDialog extends StatelessWidget {
   String buttonCancel;
   String buttonAction;
   VoidCallback action;
-ModalDialog(this.title, String desc, String buttonCancel, String buttonAction, VoidCallback action){
+  VoidCallback actionB;
+
+ModalDialog(this.title, String desc, String buttonCancel, String buttonAction, VoidCallback action, this.actionB){
   this.title = title;
   this.description = desc;
   this.buttonCancel = buttonCancel;
@@ -15,7 +17,6 @@ ModalDialog(this.title, String desc, String buttonCancel, String buttonAction, V
 }
   @override
   Widget build(BuildContext context) {
-    final myColor = Theme.of(context).accentColor;
     return AlertDialog(
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(20.0))),
@@ -49,9 +50,9 @@ ModalDialog(this.title, String desc, String buttonCancel, String buttonAction, V
                         children: <Widget>[
                         FlatButton(
               child: new Text(buttonCancel, style: TextStyle(color: Colors.blue, fontSize: 18)),
-              onPressed: () {
+              onPressed: actionB == null ? () {
                 Navigator.of(context).pop();
-              },
+              } : actionB,
             ),
                       FlatButton(
               child: new Text(buttonAction, style: TextStyle(color: Colors.blue, fontSize: 18)),

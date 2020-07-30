@@ -1,5 +1,6 @@
 
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:preferencia_usuario_app/src/models/usuarios_model.dart';
 
@@ -8,6 +9,7 @@ class LoginProvider{
 
 
   Future<Usuario> _procesarRespuesta(Uri url, body) async{
+    try{
   final resp = await http.post(url, body: body);
   final decodeData = json.decode(resp.body);
   Usuario usuario = new Usuario();
@@ -20,6 +22,9 @@ class LoginProvider{
     usuario.token = decodeData['token'];
   }
   return usuario;
+    }on SocketException catch (_) {
+     return null;
+    }
   }
 
   Future<Usuario> getLogin(String nick, String pass)async{

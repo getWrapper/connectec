@@ -11,9 +11,9 @@ class TokenPushProvider{
     final decodeData = json.decode(resp.body);
     return decodeData['ok'].toString();
   }
-   Future<String> actTokenId(String token) async{
+   Future<String> actTokenId(String token, String newToken) async{
     final url = Uri.http(_url, 'token');
-    final resp = await http.put(url,body:{"token":token});
+    final resp = await http.put(url,body:{"token":token, "newToken":newToken});
     final decodeData = json.decode(resp.body);
     return decodeData['ok'].toString();
   }

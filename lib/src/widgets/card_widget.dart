@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:preferencia_usuario_app/src/models/noticias_model.dart';
-import 'package:preferencia_usuario_app/src/pages/noticias_detalle_page.dart';
+import 'package:preferencia_usuario_app/src/pages/avisos/avisos_detalle_page.dart';
 import 'package:preferencia_usuario_app/src/providers/noticias_provider.dart';
 
 class CardNoticias extends StatelessWidget {

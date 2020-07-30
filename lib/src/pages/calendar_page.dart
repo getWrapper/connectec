@@ -3,7 +3,7 @@ import 'package:flutter_clean_calendar/flutter_clean_calendar.dart';
 import 'package:preferencia_usuario_app/src/widgets/menu_widget.dart';
 
 class CalendarPage extends StatefulWidget {
-  static final String routeName = 'materias-page';
+  static final String routeName = 'eventos-page';
   @override
   State<StatefulWidget> createState() {
     return _CalendarPageState();

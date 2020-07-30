@@ -1,8 +1,10 @@
+import 'dart:io';
+
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:preferencia_usuario_app/src/pages/calendar_page.dart';
-import 'package:preferencia_usuario_app/src/pages/noticias_page.dart';
-import 'package:preferencia_usuario_app/src/pages/tareas_page.dart';
+import 'package:preferencia_usuario_app/src/pages/avisos/avisos_page.dart';
+import 'package:preferencia_usuario_app/src/widgets/modal_dialog.dart';
 
 class NewsPage extends StatefulWidget {
 
@@ -15,7 +17,6 @@ class NewsPage extends StatefulWidget {
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   List<Widget> _widgetOptions = <Widget>[
     NoticiasPage(),
-    TareasPage(),
     CalendarPage(),
   ];
 
@@ -29,7 +30,6 @@ class _NewsPageState extends State<NewsPage> {
           child: Scaffold(
         body: SizedBox.expand(
           child: _widgetOptions.elementAt(_currentIndex)),
-        // bottomNavigationBar: BottomNavy(),
         bottomNavigationBar: BottomNavyBar(
           selectedIndex: _currentIndex,
           showElevation: true,
@@ -38,9 +38,8 @@ class _NewsPageState extends State<NewsPage> {
           onItemSelected: _onItemTapped, 
           iconSize: 25,
           items: [
-            _crearItem('Noticias', Icons.new_releases, Theme.of(context).accentColor),
-            _crearItem('Tareas', Icons.playlist_add_check, Theme.of(context).accentColor),
-            _crearItem('Materias', Icons.insert_invitation, Theme.of(context).accentColor)
+            _crearItem('Avisos', Icons.record_voice_over, Theme.of(context).accentColor),
+            _crearItem('Eventos', Icons.insert_invitation, Theme.of(context).accentColor)
           ],
           )
        ),
@@ -64,29 +63,12 @@ class _NewsPageState extends State<NewsPage> {
   }
 
   Future<bool> _onBackPressed() {
-    return showDialog(
-          context: context,
-          builder: (context) => new AlertDialog(
-                title: new Text('¿Estás seguro?'),
-                content: new Text('¿Quieres salir de la aplicación?'),
-                actions: <Widget>[
-                   // usually buttons at the bottom of the dialog
-            new FlatButton(
-              child: new Text("Cancelar"),
-              onPressed: () {
-                Navigator.of(context).pop(false);
-              },
-            ),
-            new FlatButton(
-              child: new Text("Cerrar"),
-              onPressed: () {
-                Navigator.of(context).pop(true);
-              },
-            )
-                ],
-              ),
-        ) ??
-        false;
+   var alert = ModalDialog('¿Estás seguro?',
+        '¿Quieres salir de la aplicación?', 'Cancelar', 'Salir', () {
+          exit(0);
+      // Navigator.of(context).pop(true);
+    },null);
+    return showDialog(context: context, builder: (context) => alert);
   }
    Widget roundedButton(String buttonLabel, Color bgColor, Color textColor) {
     var loginBtn = new Container(

@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:preferencia_usuario_app/src/shared_prefs/preferencias_usuario.dart';
 import 'package:preferencia_usuario_app/src/widgets/modal_dialog.dart';
 
+// ignore: must_be_immutable
 class MenuWidget extends StatelessWidget {
+
   Color _primaryColor;
+
   Color _accentColor;
+
   final prefs = new PreferenciasUsuario();
 
   @override
@@ -16,6 +20,10 @@ class MenuWidget extends StatelessWidget {
       child: ListView(padding: EdgeInsets.zero, children: <Widget>[
         _validarHeaderSesion(),
         ..._crearItemsAdmin(context),
+         _crearItem(Icons.assessment, context, 'Calificaciones', 'calificaciones-page', 0, 1),
+        Container(child: Divider()),
+        // _itemDarkMode(),
+        _crearItem(Icons.settings, context, 'Configuración', 'settings-page', 0, 1),
         Container(child: Divider()),
         _crearItemSession(context),
       ]),
@@ -30,27 +38,28 @@ class MenuWidget extends StatelessWidget {
         leading: Icon(
           icon,
           color: _primaryColor,
-          size: 30.0,
+          size: 30.0
         ),
         title: Text('$titulo'),
         onTap: () {
+          Navigator.pop(context);
           if (backButton == 0) {
-            Navigator.pop(context);
             Navigator.pushReplacementNamed(context, route);
           } else {
             Navigator.pushNamed(context, route);
           }
+          
         });
   }
 
   Widget _crearItemSession(BuildContext context) {
     if (prefs.loggedIn == 0) {
       return _crearItem(
-          Icons.exit_to_app, context, 'Iniciar Session', 'login-page', 0, 1);
+          Icons.power_settings_new, context, 'Iniciar Session', 'login-page', 0, 1);
     } else {
       return ListTile(
           leading: Icon(
-            Icons.directions_run,
+            Icons.exit_to_app,
             color: _primaryColor,
             size: 30.0,
           ),
@@ -64,21 +73,21 @@ class MenuWidget extends StatelessWidget {
       return UserAccountsDrawerHeader(
         decoration: BoxDecoration(
             image: DecorationImage(
-                image: AssetImage('assets/img/menu.jpg'), fit: BoxFit.cover)),
+                image: AssetImage('assets/img/tec.jpg'), fit: BoxFit.cover)),
         // margin: EdgeInsets.only(bottom: 40.0),
-        currentAccountPicture: CircleAvatar(
-          backgroundImage: AssetImage('assets/img/tec.jpg'),
-        ),
+        // currentAccountPicture: CircleAvatar(
+        //   backgroundImage: AssetImage('assets/img/tec.jpg'),
+        // ),
         accountName: new Container(
             child: Text(
           prefs.nombreUsuario,
-          style: TextStyle(color: _accentColor, fontSize: 18.0),
+          style: TextStyle(color: Colors.white, fontSize: 18.0),
         )),
-        // accountEmail: new Container(
-        //     child: Text(
-        //   'jccalderon@stefanini.com',
-        //   style: TextStyle(color: _accentColor),
-        // )),
+        accountEmail: new Container(
+            child: Text(
+          prefs.nick,
+          style: TextStyle(color: Colors.white),
+        )),
       );
     } else {
       return DrawerHeader(
@@ -93,12 +102,13 @@ class MenuWidget extends StatelessWidget {
   List<Widget> _crearItemsAdmin(BuildContext context) {
     if (prefs.userRol == 'ADMIN_ROLE' && prefs.loggedIn == 1) {
       return [
-        _crearItem(Icons.record_voice_over, context, 'Nuevo Aviso',
+        _crearItem(Icons.assignment, context, 'Avisos', 'news', 0, 0),
+        _crearItem(Icons.announcement, context, 'Nuevo Aviso',
             'aviso-nuevo', 0, 0),
       ];
     } else {
       return [
-        _crearItem(Icons.pages, context, 'Avisos', 'news', 0, 0),
+        _crearItem(Icons.assignment, context, 'Avisos', 'news', 0, 0),
         _crearItem(Icons.insert_invitation, context, 'Materias', '', 1, 0),
       ];
     }
@@ -109,7 +119,7 @@ class MenuWidget extends StatelessWidget {
         'Cancelar', 'Cerrar sesión', () {
       prefs.loggedIn = 0;
       Navigator.pushReplacementNamed(context, 'news');
-    });
+    },null);
 
     showDialog(context: context, builder: (context) => alert);
   }

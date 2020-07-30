@@ -8,6 +8,7 @@ class Usuario {
   bool ok;
   String message;
   String token;
+  bool connection;
   
 
   Usuario({
