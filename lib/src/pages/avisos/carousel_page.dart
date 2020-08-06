@@ -9,13 +9,22 @@ class CarouselPage extends StatelessWidget {
   Widget build(BuildContext context) {
   final List<String> _imageUrls = ModalRoute.of(context).settings.arguments;
 
-return Scaffold(
-        body: Container(
-          child: SliderWidget(
-            imageUrls: _imageUrls,
-            imageBorderRadius: BorderRadius.circular(8.0),
+return SafeArea(
+  child:   Scaffold(
+  
+          body: Container(
+  
+            child: SliderWidget(
+  
+              imageUrls: _imageUrls,
+  
+              imageBorderRadius: BorderRadius.circular(8.0),
+  
+            ),
+  
+          )
+  
           ),
-        )
-        );
+);
   }
 }

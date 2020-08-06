@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:preferencia_usuario_app/src/models/noticias_model.dart';
 import 'package:preferencia_usuario_app/src/pages/avisos/avisos_detalle_page.dart';
-import 'package:preferencia_usuario_app/src/providers/noticias_provider.dart';
+import 'package:preferencia_usuario_app/src/providers/avisos_provider.dart';
 
 class NoticiasSearch extends SearchDelegate{
 String seleccion ='';
-final noticiasProvider = new NoticiasProvider();
+final noticiasProvider = new AvisosProvider();
 
   @override
   List<Widget> buildActions(BuildContext context) {

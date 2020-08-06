@@ -190,7 +190,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   Widget _progress() {
     return _progressActive == true
         ? Container(
-            color: Colors.black.withOpacity(0.7),
+            color: Colors.black.withOpacity(0.3),
           )
         : Container();
   }

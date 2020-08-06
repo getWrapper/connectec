@@ -5,7 +5,7 @@ import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:preferencia_usuario_app/src/models/noticias_model.dart';
 import 'package:preferencia_usuario_app/src/pages/avisos/carousel_page.dart';
-import 'package:preferencia_usuario_app/src/providers/noticias_provider.dart';
+import 'package:preferencia_usuario_app/src/providers/avisos_provider.dart';
 import 'package:preferencia_usuario_app/src/shared_prefs/preferencias_usuario.dart';
 import 'package:preferencia_usuario_app/src/widgets/modal_dialog.dart';
 
@@ -19,7 +19,7 @@ class NoticiasDetallePage extends StatefulWidget {
 class _NoticiasDetallePageState extends State<NoticiasDetallePage> {
   final prefs = new PreferenciasUsuario();
 
-  final avisosProvider = NoticiasProvider();
+  final avisosProvider = AvisosProvider();
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 

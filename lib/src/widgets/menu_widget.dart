@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:preferencia_usuario_app/src/pages/avisos/avisos_page.dart';
+import 'package:preferencia_usuario_app/src/pages/avisos/video.dart';
 import 'package:preferencia_usuario_app/src/shared_prefs/preferencias_usuario.dart';
 import 'package:preferencia_usuario_app/src/widgets/modal_dialog.dart';
 
@@ -26,6 +28,7 @@ class MenuWidget extends StatelessWidget {
         _crearItem(Icons.settings, context, 'Configuración', 'settings-page', 0, 1),
         Container(child: Divider()),
         _crearItemSession(context),
+        _crearItem(Icons.assignment, context, 'Video', Video.routeName, 0, 1),
       ]),
     );
   }
@@ -102,13 +105,13 @@ class MenuWidget extends StatelessWidget {
   List<Widget> _crearItemsAdmin(BuildContext context) {
     if (prefs.userRol == 'ADMIN_ROLE' && prefs.loggedIn == 1) {
       return [
-        _crearItem(Icons.assignment, context, 'Avisos', 'news', 0, 0),
+        _crearItem(Icons.assignment, context, 'Avisos', NoticiasPage.routeName, 0, 0),
         _crearItem(Icons.announcement, context, 'Nuevo Aviso',
             'aviso-nuevo', 0, 0),
       ];
     } else {
       return [
-        _crearItem(Icons.assignment, context, 'Avisos', 'news', 0, 0),
+        _crearItem(Icons.assignment, context, 'Avisos', NoticiasPage.routeName, 0, 0),
         _crearItem(Icons.insert_invitation, context, 'Materias', '', 1, 0),
       ];
     }

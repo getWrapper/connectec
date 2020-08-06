@@ -3,9 +3,10 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:preferencia_usuario_app/src/models/usuarios_model.dart';
+import 'package:preferencia_usuario_app/src/util/utils.dart';
 
 class LoginProvider{
-  String _url = 'connectec-alpha.herokuapp.com';
+  String _url = Configuracion.url;
 
 
   Future<Usuario> _procesarRespuesta(Uri url, body) async{

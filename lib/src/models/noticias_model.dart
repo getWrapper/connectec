@@ -1,4 +1,6 @@
 
+import 'package:preferencia_usuario_app/src/util/utils.dart';
+
 class Noticias {
 
   List<Noticia> items = new List();
@@ -44,7 +46,7 @@ Noticia.fromJsonMap(Map<String, dynamic> json) {
 
    getNoticiaImg  (){
      List<String> imgUrls = new List();
-         String _url = 'connectec-alpha.herokuapp.com';
+         String _url = Configuracion.url;
          if(img.images.isEmpty){
            imgUrls.add('https://www.pequenomundo.cl/wp-content/themes/childcare/images/default.png');
          }

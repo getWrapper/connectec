@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:preferencia_usuario_app/src/pages/avisos/aviso_nuevo.dart';
 import 'package:preferencia_usuario_app/src/pages/avisos/carousel_page.dart';
-import 'package:preferencia_usuario_app/src/pages/avisos/editar_nuevo.dart';
+import 'package:preferencia_usuario_app/src/pages/avisos/aviso_editar.dart';
 import 'package:preferencia_usuario_app/src/pages/calificaciones/calificaciones_home.dart';
 import 'package:preferencia_usuario_app/src/pages/calificaciones/cardex.dart';
 import 'package:preferencia_usuario_app/src/pages/calificaciones/parciales.dart';
@@ -11,7 +11,9 @@ import 'package:preferencia_usuario_app/src/pages/home_page.dart';
 import 'package:preferencia_usuario_app/src/pages/avisos/avisos_detalle_page.dart';
 import 'package:preferencia_usuario_app/src/pages/avisos/avisos_page.dart';
 import 'package:preferencia_usuario_app/src/pages/settings_page.dart';
+import 'package:preferencia_usuario_app/src/providers/avisos_provider.dart';
 import 'package:preferencia_usuario_app/src/providers/push_notifications_provider.dart';
+import 'package:preferencia_usuario_app/src/routes/routes.dart';
 import 'package:preferencia_usuario_app/src/shared_prefs/preferencias_usuario.dart';
 import 'package:preferencia_usuario_app/src/pages/login/login_page.dart';
 import 'package:preferencia_usuario_app/src/blocs/provider.dart';
@@ -32,6 +34,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  AvisosProvider noticiasProvider = new AvisosProvider();
   final prefs = new PreferenciasUsuario();
   final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
   final localPush = FlutterLocalNotificationsPlugin();
@@ -91,24 +94,10 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: Colors.pink
       ),
       debugShowCheckedModeBanner: false,
-      title: 'Preferencias',
-      // initialRoute: prefs.ultimaPagina,
-      // initialRoute: NewsPage.routeName,
-      initialRoute: NewsPage.routeName,
+      title: 'ConnecTec',
+      initialRoute: NoticiasPage.routeName,
 
-      routes: {
-        NewsPage.routeName     : ( BuildContext context ) => NewsPage(),
-        AvisoNuevoPage.routeName : (BuildContext context) => AvisoNuevoPage(),
-        AvisoEditarPage.routeName: (BuildContext context) => AvisoEditarPage(),
-        NoticiasPage.routeName : (BuildContext context) => NoticiasPage(),
-        NoticiasDetallePage.routeName : (BuildContext context) => NoticiasDetallePage(),
-        LoginPage.routeName    : (BuildContext context) => LoginPage(),
-        SettingsPage.routeName : (BuildContext context) => SettingsPage(),
-        CalificacionesHomePage.routeName: (BuildContext context) => CalificacionesHomePage(),
-        ParcialesPage.routeName : (BuildContext context) => ParcialesPage(),
-        CardexPage.routeName : (BuildContext context) => CardexPage(),
-        CarouselPage.routeName : (BuildContext context) => CarouselPage(),
-      },
+      routes: getAplicationRoutes()
     );
   }
 

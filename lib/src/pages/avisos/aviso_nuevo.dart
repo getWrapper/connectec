@@ -6,8 +6,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:preferencia_usuario_app/src/models/noticias_model.dart';
 import 'package:preferencia_usuario_app/src/models/nuevo_aviso.dart';
+import 'package:preferencia_usuario_app/src/providers/avisos_provider.dart';
 import 'package:preferencia_usuario_app/src/providers/connection_provider.dart';
-import 'package:preferencia_usuario_app/src/providers/noticias_provider.dart';
 import 'package:preferencia_usuario_app/src/widgets/menu_widget.dart';
 import 'package:preferencia_usuario_app/src/widgets/modal_dialog.dart';
 
@@ -21,7 +21,7 @@ class AvisoNuevoPage extends StatefulWidget {
 
 class _AvisoNuevoPageState extends State<AvisoNuevoPage>
     with TickerProviderStateMixin {
-  NoticiasProvider avisoProvider = NoticiasProvider();
+  AvisosProvider avisoProvider = AvisosProvider();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   static var _keyValidationForm = GlobalKey<FormState>();
   TextEditingController _textEditTitle = TextEditingController();
@@ -74,7 +74,7 @@ class _AvisoNuevoPageState extends State<AvisoNuevoPage>
           ),  
           _progressActive == true
               ? Container(
-                  color: Colors.black.withOpacity(0.7),
+                  color: Colors.black.withOpacity(0.3),
                   child: Center(child: Image.asset('assets/loader.gif', width: 100.0),),
                 )
               : Container(),
@@ -202,27 +202,24 @@ class _AvisoNuevoPageState extends State<AvisoNuevoPage>
       height = sizeScreen.height * 0.25;
     }
 
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: <Widget>[
-          Stack(
-            children: <Widget>[
-              Container(
-                color: Colors.grey[100],
-                height: height,
-                child: buildGridView(),
-              ),
-              Positioned(
-                child: _buttonImg(),
-                bottom: 0.0,
-                right: 0.0,
-              )
-            ],
-          ),
-          _labelSelected(),
-        ],
-      ),
+    return Column(
+      children: <Widget>[
+        Stack(
+          children: <Widget>[
+            Container(
+              color: Colors.grey[100],
+              height: height,
+              child: buildGridView(),
+            ),
+            Positioned(
+              child: _buttonImg(),
+              bottom: 0.0,
+              right: 0.0,
+            )
+          ],
+        ),
+        _labelSelected(),
+      ],
     );
   }
 

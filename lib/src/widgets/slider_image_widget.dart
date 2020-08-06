@@ -1,5 +1,7 @@
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gallery_saver/gallery_saver.dart';
 import 'package:page_indicator/page_indicator.dart';
 import 'package:photo_view/photo_view.dart';
 
@@ -50,7 +52,9 @@ class ImageSliderWidgetState extends State<SliderWidget> {
               child: IconButton(
                   icon: Icon(Icons.more_vert),
                   iconSize: 30.0,
-                  onPressed: () {},
+                  onPressed: () {
+                    _displayBottomSheet();
+                  },
                   color: Colors.white),
               right: 0.0,
               top: 16.0),
@@ -85,6 +89,53 @@ class ImageSliderWidgetState extends State<SliderWidget> {
         imageProvider: NetworkImage(imgUrl),
         minScale: 0.2,
         maxScale: 2.0,
+      ),
+    );
+  }
+
+  void _displayBottomSheet() async {
+    showModalBottomSheet(
+        context: Scaffold.of(context).context,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20.0), topRight: Radius.circular(20.0)),
+        ),
+        backgroundColor: Colors.white,
+        builder: (ctx) {
+          return Container(
+            height: MediaQuery.of(context).size.height * 0.15,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  ListTile(
+                    leading: Icon(Icons.file_download),
+                    title: Text('Guardar en el teléfono'),
+                    onTap: () async {
+                      int pos = _controller.page.toInt();
+        Navigator.pop(context);
+        _showToast('Descargando imagen ...');
+String path = widget.imageUrls[pos];
+    GallerySaver.saveImage(path, albumName: 'ConnecTec').then((bool success) {
+      // setState(() {
+      //   _showToast('Imagen guardada');
+      // });
+    });
+                    },
+                  )
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  void _showToast(String _msg) {
+    final scaffold = Scaffold.of(context);
+    scaffold.showSnackBar(
+      SnackBar(
+        duration: Duration(seconds: 2),
+        content: ListTile(leading: Icon(Icons.file_download), title: Text(_msg, style: TextStyle(fontSize: 15.0)), trailing: CircularProgressIndicator())
       ),
     );
   }

@@ -1,9 +1,10 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:preferencia_usuario_app/src/util/utils.dart';
+
 class TokenPushProvider{
-  String _url = 'connectec-alpha.herokuapp.com';
-  // String _url = '10.0.2.2:3000';
+  String _url = Configuracion.url;
 
   Future<String> setTokenId(String token) async{
     final url = Uri.http(_url, 'token');
